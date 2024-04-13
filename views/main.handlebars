@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercado Web</title>
+    <meta name="author" content="Pablo Troncoso">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/bootstrap-css/bootstrap.min.css">
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <!-- Incluye Bootstrap -->
+    <script src="/jquery/jquery.min.js"></script>
+    <script src="/bootstrap-js/bootstrap.bundle.min.js"></script>
+</head>
+
+<style>
+    .producto-seleccionado {
+        opacity: 0.5;
+    }
+
+    .lista-productos-horizontal {
+        list-style-type: none; 
+        padding: 0; 
+        display: flex; 
+        flex-wrap: wrap; 
+        gap: 10px; 
+    }
+
+    .lista-productos-horizontal li {
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+    }
+
+    .lista-productos-horizontal img {
+        border-radius: 5px; 
+        width: 50px; 
+        height: 50px; 
+    }
+</style>
+
+<body>
+
+    <!-- Parciales -->
+    
+    {{> dashboard}}
+
+</body>
+
+<script>
+    var productosSeleccionados = [];
+
+    function seleccionarProducto(elemento) {
+        var nombreProducto = $(elemento).data('nombre');
+        if ($(elemento).hasClass('producto-seleccionado')) {
+            $(elemento).removeClass('producto-seleccionado');
+            productosSeleccionados = productosSeleccionados.filter(producto => producto !== nombreProducto);
+        } else {
+            $(elemento).addClass('producto-seleccionado');
+            productosSeleccionados.push(nombreProducto);
+        }
+    }
+
+    $(document).ready(function () {
+        // Modal | Actualizar Contenido con los Productos Seleccionados
+        $('.fas fa-cart-shopping cart-icon').click(function () {
+            var listaProductos = productosSeleccionados.map(producto => ` <li>
+                <img src="/images/${producto}.png" class="card-img-top" alt="${producto}" style="width: 50px; height: 50px;">
+                </li>`).join('');
+            $('#carritoModal .modal-body').html(`<ul class="lista-productos-horizontal">${listaProductos}</ul>`);
+            $('#carritoModal').modal('show');
+        });
+    });
+    function cerrarModal() {
+        $('#carritoModal').modal('hide');
+    }
+</script>
+
+</html>
